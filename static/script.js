@@ -8,6 +8,39 @@ const welcome = document.getElementById("welcome");
 let messages = [];
 let busy = false;
 
+function addCodeCopyButtons(container) {
+  container.querySelectorAll("pre").forEach((pre) => {
+    if (pre.querySelector(".code-copy-btn")) return;
+
+    const code = pre.querySelector("code");
+    if (!code) return;
+
+    const button = document.createElement("button");
+    button.className = "code-copy-btn";
+    button.type = "button";
+    button.textContent = "Copy code";
+
+    button.addEventListener("click", async () => {
+      try {
+  await navigator.clipboard.writeText(code.innerText);
+  button.textContent = "Copied!";
+
+  setTimeout(() => {
+    button.textContent = "Copy code";
+  }, 2000);
+} catch (error) {
+  button.textContent = "Failed";
+
+  setTimeout(() => {
+    button.textContent = "Copy code";
+  }, 2000);
+}   
+});
+
+    pre.appendChild(button);
+  });
+}
+
 function updateWelcome() {
   welcome.hidden = messages.length > 0;
   messagesContainer.hidden = messages.length === 0;
@@ -26,15 +59,44 @@ function addMessage(role, content, isLoading = false) {
 
   const bubble = document.createElement("div");
   bubble.className = "bubble";
-  bubble.textContent = content;
 
- if (role === "assistant" && !isLoading) {
-  bubble.innerHTML = DOMPurify.sanitize(marked.parse(content));
-} else {
-  bubble.textContent = content;
-}
+  if (role === "assistant" && !isLoading) {
+    bubble.innerHTML = DOMPurify.sanitize(marked.parse(content));
+    addCodeCopyButtons(bubble);
+  } else {
+    bubble.textContent = content;
+  }
 
   row.appendChild(bubble);
+
+  // Copy button for completed AI responses
+  if (role === "assistant" && !isLoading) {
+    const copyButton = document.createElement("button");
+    copyButton.className = "copy-btn";
+    copyButton.textContent = "📋 Copy";
+    copyButton.type = "button";
+    copyButton.title = "Copy response";
+
+    copyButton.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(content);
+        copyButton.textContent = "✓ Copied!";
+
+        setTimeout(() => {
+          copyButton.textContent = "📋 Copy";
+        }, 2000);
+      } catch (error) {
+        copyButton.textContent = "Copy failed";
+
+        setTimeout(() => {
+          copyButton.textContent = "📋 Copy";
+        }, 2000);
+      }
+    });
+
+    row.appendChild(copyButton);
+  }
+
   messagesContainer.appendChild(row);
   messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
@@ -48,10 +110,13 @@ function setBusy(value) {
   sendButton.textContent = value ? "…" : "↑";
 }
 
+let lastUserPrompt = "";
+
 async function sendMessage(text) {
   text = text.trim();
 
   if (!text || busy) return;
+  lastUserPrompt = text;
 
   messages.push({ role: "user", content: text });
   updateWelcome();
@@ -84,12 +149,59 @@ if (typeof data.reply !== "string" || !data.reply.trim()) {
   throw new Error("Nova AI returned an invalid response. Please try again.");
 }
 
-  loading.bubble.innerHTML = DOMPurify.sanitize(
-  marked.parse(data.reply)
+const formattedReply = data.reply.replace(
+  /\n[ \t]*\n(?=[ \t]*\|)/g,
+  "\n"
 );
+
+loading.bubble.innerHTML = DOMPurify.sanitize(
+  marked.parse(formattedReply));
+  addCodeCopyButtons(loading.bubble);
+
+
 loading.bubble.style.opacity = "1";
 loading.bubble.removeAttribute("aria-label");
+// Add copy button after the AI response is ready
+const copyButton = document.createElement("button");
+copyButton.className = "copy-btn";
+copyButton.textContent = "📋 Copy";
+copyButton.type = "button";
 
+copyButton.addEventListener("click", async () => {
+  try {
+    const cleanCopy = loading.bubble.cloneNode(true);
+
+cleanCopy.querySelectorAll(".code-copy-btn").forEach((button) => {
+  button.remove();
+});
+
+await navigator.clipboard.writeText(cleanCopy.innerText.trim());
+    copyButton.textContent = "✓ Copied!";
+
+    setTimeout(() => {
+      copyButton.textContent = "📋 Copy";
+    }, 2000);
+  } catch (error) {
+    copyButton.textContent = "Copy failed";
+
+    setTimeout(() => {
+      copyButton.textContent = "📋 Copy";
+    }, 2000);
+  }
+});
+
+loading.row.appendChild(copyButton);
+
+const regenerateButton = document.createElement("button");
+regenerateButton.className = "copy-btn";
+regenerateButton.textContent = "↻ Regenerate";
+regenerateButton.type = "button";
+
+regenerateButton.addEventListener("click", () => {
+  regenerateResponse(loading.bubble, regenerateButton);
+});
+
+loading.row.appendChild(regenerateButton);
     messages.push({
       role: "assistant",
       content: data.reply
@@ -105,6 +217,54 @@ loading.bubble.removeAttribute("aria-label");
   } finally {
     setBusy(false);
     input.focus();
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+}
+
+async function regenerateResponse(bubble, button) {
+  if (busy || !lastUserPrompt) return;
+
+  setBusy(true);
+  button.disabled = true;
+  button.textContent = "Regenerating…";
+
+  // Remove the previous AI answer from conversation history
+  if (messages[messages.length - 1]?.role === "assistant") {
+    messages.pop();
+  }
+
+  try {
+    const response = await fetch("/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        messages: messages.slice(-12)
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Regeneration failed.");
+    }
+
+    bubble.innerHTML = DOMPurify.sanitize(marked.parse(data.reply));
+    addCodeCopyButtons(bubble);
+
+    // Replace the old response in conversation history
+    messages.push({
+      role: "assistant",
+      content: data.reply
+    });
+
+    button.textContent = "↻ Regenerate";
+  } catch (error) {
+    button.textContent = "Regenerate failed";
+  } finally {
+    button.disabled = false;
+    setBusy(false);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
   }
 }

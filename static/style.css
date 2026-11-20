@@ -533,3 +533,62 @@ textarea::placeholder {
   border-top: 1px solid #45485a;
   margin: 1.3rem 0;
 }
+/* Nova AI response copy button */
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 6px 12px;
+  border: 1px solid rgba(168, 139, 250, 0.2);
+  border-radius: 8px;
+  background: rgba(139, 92, 246, 0.08);
+  color: #b8a3ff;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+  background: rgba(139, 92, 246, 0.18);
+  border-color: rgba(168, 139, 250, 0.45);
+  color: #d5c8ff;
+  transform: translateY(-1px);
+}
+
+.copy-btn:active {
+  transform: scale(0.97);
+}
+
+.copy-btn:focus-visible {
+  outline: 2px solid #a78bfa;
+  outline-offset: 3px;
+}
+
+/* Code block copy button */
+pre {
+  position: relative;
+}
+
+.code-copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 5px 9px;
+  border: 1px solid rgba(168, 139, 250, 0.25);
+  border-radius: 6px;
+  background: #242130;
+  color: #b8a3ff;
+  font-size: 11px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: 0.2s ease;
+  z-index: 2;
+}
+
+.code-copy-btn:hover {
+  background: #382b54;
+  color: #ffffff;
+  border-color: #a78bfa;
+}
