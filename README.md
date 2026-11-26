@@ -169,6 +169,15 @@ Deployment requires the application's Python dependencies, the correct Flask sta
 
 Nova AI was developed to explore the integration of generative AI with full-stack web development, including API integration, conversational interfaces, frontend interaction, conversation management, and deployment.
 
+## 🗺️ Roadmap
+
+- [ ] Voice interaction support
+- [ ] Export chat conversations
+- [ ] Improve mobile experience
+- [ ] User authentication and cloud chat storage
+- [ ] Add more AI model options
+- [ ] Improve error handling and performance
+
 ## 👨‍💻 Author
 
 **VF Mohammed Fayas**
