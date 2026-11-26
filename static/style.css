@@ -27,6 +27,16 @@ button, textarea {
 
 button {
   cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.2s ease,
+              border-color 0.2s ease,
+              color 0.2s ease,
+              opacity 0.2s ease;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--accent-light);
+  outline-offset: 2px;
 }
 
 .app {
@@ -65,17 +75,27 @@ button {
 
 .new-chat {
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 13px;
+  border-radius: 8px;
+  padding: 10px 12px;
+  min-height: 40px;
   color: var(--text);
   background: var(--panel-light);
   text-align: left;
-  transition: .2s;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.new-chat:hover, .clear-button:hover {
+.new-chat:hover,
+.clear-button:hover {
   border-color: var(--accent);
   background: #292d40;
+  transform: translateY(-1px);
+}
+
+.new-chat:active,
+.clear-button:active {
+  transform: translateY(0);
 }
 
 .sidebar-label {
@@ -144,12 +164,16 @@ button {
 
 .clear-button {
   border: 1px solid var(--border);
-  border-radius: 9px;
-  padding: 9px 13px;
+  border-radius: 8px;
+  min-height: 36px;
+  padding: 8px 12px;
   background: transparent;
   color: var(--muted);
-  font-size: 12px;
-  transition: .2s;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.2s ease,
+              border-color 0.2s ease,
+              color 0.2s ease;
 }
 
 .welcome {
@@ -347,23 +371,30 @@ textarea::placeholder {
 }
 
 #send-button {
-  width: 37px;
-  height: 37px;
-  border: 0;
-  border-radius: 11px;
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
   background: var(--accent);
   color: #171326;
-  font-size: 23px;
-  transition: .2s;
+  font-size: 20px;
+  font-weight: 600;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
 }
 
 #send-button:hover {
   background: var(--accent-light);
-  transform: translateY(-1px);
+}
+
+#send-button:active {
+  opacity: 0.85;
 }
 
 #send-button:disabled {
-  opacity: .5;
+  opacity: 0.5;
   cursor: wait;
 }
 
@@ -466,7 +497,7 @@ textarea::placeholder {
 }
 
 .message.assistant .bubble li {
-  margin: 0.4em 0;
+  margin: 0.15em 0;
 }
 
 .message.assistant .bubble strong {
@@ -539,31 +570,33 @@ textarea::placeholder {
   align-items: center;
   gap: 6px;
   margin-top: 8px;
-  padding: 6px 12px;
-  border: 1px solid rgba(168, 139, 250, 0.2);
-  border-radius: 8px;
-  background: rgba(139, 92, 246, 0.08);
-  color: #b8a3ff;
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
   font-size: 12px;
   font-family: inherit;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease,
+              border-color 0.2s ease,
+              color 0.2s ease;
 }
 
 .copy-btn:hover {
-  background: rgba(139, 92, 246, 0.18);
-  border-color: rgba(168, 139, 250, 0.45);
-  color: #d5c8ff;
-  transform: translateY(-1px);
+  background: var(--panel-light);
+  border-color: #454b60;
+  color: var(--text);
 }
 
 .copy-btn:active {
-  transform: scale(0.97);
+  opacity: 0.85;
 }
 
 .copy-btn:focus-visible {
-  outline: 2px solid #a78bfa;
-  outline-offset: 3px;
+  outline: 2px solid var(--accent-light);
+  outline-offset: 2px;
 }
 
 /* Code block copy button */
@@ -576,19 +609,260 @@ pre {
   top: 8px;
   right: 8px;
   padding: 5px 9px;
-  border: 1px solid rgba(168, 139, 250, 0.25);
+  border: 1px solid var(--border);
   border-radius: 6px;
-  background: #242130;
-  color: #b8a3ff;
+  background: var(--panel-light);
+  color: var(--muted);
   font-size: 11px;
   font-family: inherit;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: background-color 0.2s ease,
+              border-color 0.2s ease,
+              color 0.2s ease;
   z-index: 2;
 }
 
 .code-copy-btn:hover {
-  background: #382b54;
+  background: #2b3042;
+  color: var(--text);
+  border-color: #454b60;
+}
+
+.code-copy-btn:active {
+  opacity: 0.85;
+}
+
+/* Chat History */
+.history-section {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.history-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  color: #85859b;
+  margin-bottom: 10px;
+}
+
+.chat-history {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.history-item {
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: #b8b8ca;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-item:hover {
+  background: rgba(139, 92, 246, 0.12);
   color: #ffffff;
-  border-color: #a78bfa;
+}
+
+.history-item.active {
+  background: rgba(139, 92, 246, 0.16);
+  color: #ffffff;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+}
+
+/* Individual chat delete button */
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.history-item span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.delete-chat-btn,
+.rename-chat-btn {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  font-size: 14px;
+  cursor: pointer;
+  opacity: 0;
+  flex-shrink: 0;
+  padding: 0;
+  border-radius: 7px;
+  transition: background-color 0.2s ease,
+              color 0.2s ease,
+              opacity 0.2s ease;
+}
+
+.history-item:hover .delete-chat-btn,
+.history-item:hover .rename-chat-btn  {
+  opacity: 1;
+}
+
+.rename-chat-btn:hover {
+  background: var(--panel-light);
+  color: var(--text);
+}
+
+.delete-chat-btn:hover {
+  background: rgba(255, 80, 80, 0.12);
+  color: #ff6b6b;
+}
+
+/* Message edit button */
+.edit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 6px 10px;
+  margin-top: 8px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease,
+              border-color 0.2s ease,
+              color 0.2s ease;
+}
+
+.edit-btn:hover {
+  background: var(--panel-light);
+  border-color: #454b60;
+  color: var(--text);
+}
+
+.edit-btn:active {
+  opacity: 0.85;
+}
+
+/* Chat search input */
+input[type="text"] {
+  width: 100%;
+  min-height: 36px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--panel);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+}
+
+input[type="text"]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(155, 140, 255, 0.12);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="text"]::placeholder {
+  color: var(--muted);
+}
+
+/* Smooth chat history interactions */
+.history-item {
+  transition: background-color 0.2s ease,
+              border-color 0.2s ease,
+              transform 0.15s ease;
+}
+
+.history-item:hover {
+  transform: translateX(2px);
+}
+
+/* Sidebar action button interaction */
+.rename-chat-btn:active,
+.delete-chat-btn:active {
+  transform: scale(0.95);
+}
+
+/* Message action button press feedback */
+.copy-btn:active,
+.edit-btn:active {
+  transform: scale(0.97);
+}
+
+/* Scroll to bottom button */
+#scroll-to-bottom {
+  position: fixed;
+  display: flex;
+  opacity: 0;
+visibility: hidden;
+pointer-events: none;
+transform: translateY(6px);
+  bottom: 130px;
+  right: 30px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--panel-light);
+  color: var(--text);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  z-index: 10;
+  transition: background-color 0.2s ease, 
+            border-color 0.2s ease, 
+            transform 0.2s ease, 
+            opacity 0.2s ease;
+}
+
+#scroll-to-bottom.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+#scroll-to-bottom:hover {
+  background: #292d40;
+  border-color: var(--accent);
+}
+
+#scroll-to-bottom:active {
+  transform: scale(0.92);
+}
+
+@keyframes messageAppear {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message {
+  animation: messageAppear 0.25s ease;
 }

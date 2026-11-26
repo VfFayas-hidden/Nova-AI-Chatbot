@@ -23,6 +23,18 @@
         Ask questions, learn new skills, or explore ideas.
       </p>
 
+      <div class="history-section">
+  <div class="history-title">RECENT CHATS</div>
+  <input
+  type="text"
+  id="chat-search"
+  class="chat-search"
+  placeholder="Search conversations..."
+  autocomplete="off"
+/>
+  <div id="chat-history" class="chat-history"></div>
+</div>
+
       <div class="sidebar-bottom">
         <span class="status-dot"></span>
         AI assistant
@@ -80,6 +92,8 @@
 
       <section id="chat-messages" class="chat-messages"
         aria-live="polite" aria-label="Conversation"></section>
+
+        <button id="scroll-to-bottom" title="Scroll to latest message">↓</button>
 
       <section class="composer-area">
         <form id="chat-form" class="composer">
