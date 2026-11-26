@@ -2,6 +2,12 @@
 
 Nova AI is a web-based AI chatbot designed to provide an interactive conversational experience through a modern interface. Built using Python Flask and frontend technologies, it integrates an AI model API with chat management features and a responsive user interface.
 
+<p align="center">
+  <a href="https://nova-ai-chatbot-fa7p.onrender.com">
+    <img src="https://img.shields.io/badge/Live_Demo-Try_Nova_AI-8B5CF6?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Demo">
+  </a>
+</p>
+
 ## ✨ Features
 
 - AI-powered conversational interface
