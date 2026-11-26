@@ -51,6 +51,44 @@ Nova AI is a web-based AI chatbot designed to provide an interactive conversatio
 - DOMPurify
 - LocalStorage
 
+## 🚀 Getting Started
+
+### 1. Clone the repository
+
+\```bash
+git clone https://github.com/VfFayas-hidden/Nova-AI-Chatbot.git
+\```
+
+### 2. Navigate to the project folder
+
+\```bash
+cd Nova-AI-Chatbot
+\```
+
+### 3. Install dependencies
+
+\```bash
+pip install -r requirements.txt
+\```
+
+### 4. Configure your API key
+
+Create a `.env` file in the project root and add your Groq API key:
+
+\```env
+GROQ_API_KEY=your_api_key_here
+\```
+
+### 5. Run the application
+
+\```bash
+python app.py
+\```
+
+Open your browser and visit:
+
+`http://127.0.0.1:5000`
+
 ## 📂 Project Structure
 
 ```text
