@@ -8,6 +8,12 @@ Nova AI is a web-based AI chatbot designed to provide an interactive conversatio
   </a>
 </p>
 
+## 🖥️ Preview
+
+<p align="center">
+  <img src="NovaAi.png" width="100%" alt="Nova AI Chatbot Preview" />
+</p>
+
 ## ✨ Features
 
 - AI-powered conversational interface
